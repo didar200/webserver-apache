@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-apache
+  labels:
+    app: webserver-apache
+
+spec:
+  template:
+    metadata:
+      name: webserver-apache-pod
+      labels:
+        app: webserver-apache
+
+    spec:
+      containers:
+        - name: webserver-apache-con
+          image: didar200/webserver-apache
+          ports:
+            - containerPort: 80
+        
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webserver-apache
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver-apache-svc
+  labels:
+    app: webserver-apache
+
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: webserver-apache
